@@ -1,0 +1,335 @@
+﻿/**
+ * MathStar VR - Week 1 Readout
+ * Interactive functionality for the marketing page
+ * 
+ * CONFIGURATION: Edit these values to update placeholders
+ */
+
+// ============================================
+// CONFIGURATION (Easy to edit)
+// ============================================
+const CONFIG = {
+    // Contact Information
+    CONTACT_NAME: 'Femi Fadugba',
+    CONTACT_ORG: 'ShepherdXR / MathStar VR',
+    CONTACT_EMAIL: 'femi@shepherdxr.com',
+    CONTACT_PHONE: '[add phone]',
+    CONTACT_CAL_LINK: '[add calendar link]',
+    
+    // School Information
+    SCHOOL_NAME: 'David A. Ellis',
+    PROGRAM_NAME: 'Success Bound Academy (SBA)',
+    
+    // Pilot Data (Update these as data comes in)
+    TASKS_COMPLETED: 'X',
+    ACCURACY_PCT: 'Y',
+    AVG_MINUTES: '--',
+    PILOT_DATES: 'Jan 6–Jan 30',
+    LAST_UPDATED: 'January 2025',
+    
+    // Forward Email Recipients (comma-separated)
+    FORWARD_TO: 'principal@example.com, sped@example.com'
+};
+
+// ============================================
+// DOM ELEMENTS
+// ============================================
+const elements = {
+    // Navigation buttons
+    btnShare: document.getElementById('btn-share'),
+    btnPrint: document.getElementById('btn-print'),
+    btnContactNav: document.getElementById('btn-contact-nav'),
+    
+    // Finale buttons
+    btnWalkthrough: document.getElementById('btn-walkthrough'),
+    btnForward: document.getElementById('btn-forward'),
+    
+    // Modal elements
+    modal: document.getElementById('contact-modal'),
+    modalClose: document.getElementById('modal-close'),
+    
+    // Contact options in modal
+    contactEmail: document.getElementById('contact-email'),
+    contactPhone: document.getElementById('contact-phone'),
+    contactCalendar: document.getElementById('contact-calendar'),
+    contactCopy: document.getElementById('contact-copy'),
+    
+    // Toast notification
+    toast: document.getElementById('toast')
+};
+
+// ============================================
+// INITIALIZATION
+// ============================================
+document.addEventListener('DOMContentLoaded', function() {
+    console.log('MathStar Client Reporting loaded');
+    
+    // Update all placeholders with config values
+    updatePlaceholders();
+    
+    // Set up contact links
+    setupContactLinks();
+    
+    // Bind event listeners
+    bindEvents();
+});
+
+// ============================================
+// PLACEHOLDER UPDATES
+// ============================================
+function updatePlaceholders() {
+    const placeholders = document.querySelectorAll('.placeholder[data-key]');
+    
+    placeholders.forEach(el => {
+        const key = el.dataset.key;
+        if (CONFIG[key] !== undefined) {
+            // For links, update href as well
+            if (el.tagName === 'A' && key === 'CONTACT_EMAIL') {
+                el.href = `mailto:${CONFIG[key]}`;
+            }
+            el.textContent = CONFIG[key];
+        }
+    });
+}
+
+// ============================================
+// CONTACT LINKS SETUP
+// ============================================
+function setupContactLinks() {
+    // Email link
+    if (elements.contactEmail) {
+        elements.contactEmail.href = `mailto:${CONFIG.CONTACT_EMAIL}`;
+    }
+    
+    // Phone link
+    if (elements.contactPhone) {
+        const phoneNumber = CONFIG.CONTACT_PHONE.replace(/[^\d+]/g, '');
+        if (phoneNumber && phoneNumber !== 'addphone') {
+            elements.contactPhone.href = `tel:${phoneNumber}`;
+        } else {
+            elements.contactPhone.style.opacity = '0.5';
+            elements.contactPhone.style.pointerEvents = 'none';
+            elements.contactPhone.title = 'Phone number not yet added';
+        }
+    }
+    
+    // Calendar link
+    if (elements.contactCalendar) {
+        if (CONFIG.CONTACT_CAL_LINK && !CONFIG.CONTACT_CAL_LINK.includes('[add')) {
+            elements.contactCalendar.href = CONFIG.CONTACT_CAL_LINK;
+        } else {
+            elements.contactCalendar.style.opacity = '0.5';
+            elements.contactCalendar.style.pointerEvents = 'none';
+            elements.contactCalendar.title = 'Calendar link not yet added';
+        }
+    }
+}
+
+// ============================================
+// EVENT BINDINGS
+// ============================================
+function bindEvents() {
+    // Share button
+    if (elements.btnShare) {
+        elements.btnShare.addEventListener('click', handleShare);
+    }
+    
+    // Print button
+    if (elements.btnPrint) {
+        elements.btnPrint.addEventListener('click', handlePrint);
+    }
+    
+    // Contact buttons (nav and walkthrough)
+    if (elements.btnContactNav) {
+        elements.btnContactNav.addEventListener('click', openModal);
+    }
+    
+    if (elements.btnWalkthrough) {
+        elements.btnWalkthrough.addEventListener('click', openModal);
+    }
+    
+    // Forward button
+    if (elements.btnForward) {
+        elements.btnForward.addEventListener('click', handleForward);
+    }
+    
+    // Modal close
+    if (elements.modalClose) {
+        elements.modalClose.addEventListener('click', closeModal);
+    }
+    
+    // Modal overlay click to close
+    if (elements.modal) {
+        elements.modal.addEventListener('click', (e) => {
+            if (e.target === elements.modal) {
+                closeModal();
+            }
+        });
+    }
+    
+    // Copy email button
+    if (elements.contactCopy) {
+        elements.contactCopy.addEventListener('click', handleCopyEmail);
+    }
+    
+    // Keyboard navigation for modal
+    document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape' && !elements.modal.hidden) {
+            closeModal();
+        }
+    });
+}
+
+// ============================================
+// SHARE FUNCTIONALITY
+// ============================================
+async function handleShare() {
+    const shareData = {
+        title: `MathStar VR — Week 1 Readout | ${CONFIG.SCHOOL_NAME} ${CONFIG.PROGRAM_NAME}`,
+        text: 'Week 1 pilot results: Students chose math over recess. Early signals show higher engagement, calmer learning, and stronger math foundations.',
+        url: window.location.href
+    };
+    
+    // Try Web Share API first (mobile-friendly)
+    if (navigator.share && navigator.canShare && navigator.canShare(shareData)) {
+        try {
+            await navigator.share(shareData);
+            showToast('Shared successfully!');
+        } catch (err) {
+            if (err.name !== 'AbortError') {
+                // Fallback to copy link
+                copyToClipboard(window.location.href);
+                showToast('Link copied to clipboard!');
+            }
+        }
+    } else {
+        // Fallback: copy link to clipboard
+        copyToClipboard(window.location.href);
+        showToast('Link copied to clipboard!');
+    }
+}
+
+// ============================================
+// PRINT FUNCTIONALITY
+// ============================================
+function handlePrint() {
+    window.print();
+}
+
+// ============================================
+// MODAL FUNCTIONALITY
+// ============================================
+function openModal() {
+    elements.modal.hidden = false;
+    document.body.style.overflow = 'hidden';
+    
+    // Focus the close button for accessibility
+    setTimeout(() => {
+        elements.modalClose.focus();
+    }, 100);
+}
+
+function closeModal() {
+    elements.modal.hidden = true;
+    document.body.style.overflow = '';
+}
+
+// ============================================
+// FORWARD EMAIL FUNCTIONALITY
+// ============================================
+function handleForward() {
+    const currentUrl = window.location.href;
+    
+    const subject = encodeURIComponent(
+        `MathStar VR @ ${CONFIG.SCHOOL_NAME} (${CONFIG.PROGRAM_NAME}) — Week 1 early signals + Weeks 2–4 plan`
+    );
+    
+    const body = encodeURIComponent(
+`Sharing a 1-page Week 1 readout from the MathStar VR pilot at ${CONFIG.SCHOOL_NAME}'s ${CONFIG.PROGRAM_NAME}.
+
+Early signal: 10/10 students chose math over recess; 0 removals during VR.
+
+Weeks 2–4: MTSS-style progress monitoring for engagement, regulation, confidence, and foundations.
+
+Link: ${currentUrl}
+
+Contact: ${CONFIG.CONTACT_EMAIL} | ${CONFIG.CONTACT_PHONE}
+
+—
+${CONFIG.CONTACT_NAME}
+${CONFIG.CONTACT_ORG}`
+    );
+    
+    const mailtoLink = `mailto:${CONFIG.FORWARD_TO}?subject=${subject}&body=${body}`;
+    
+    window.location.href = mailtoLink;
+}
+
+// ============================================
+// COPY EMAIL FUNCTIONALITY
+// ============================================
+function handleCopyEmail() {
+    copyToClipboard(CONFIG.CONTACT_EMAIL);
+    showToast('Email copied to clipboard!');
+}
+
+// ============================================
+// UTILITY FUNCTIONS
+// ============================================
+function copyToClipboard(text) {
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard.writeText(text).catch(() => {
+            fallbackCopy(text);
+        });
+    } else {
+        fallbackCopy(text);
+    }
+}
+
+function fallbackCopy(text) {
+    const textarea = document.createElement('textarea');
+    textarea.value = text;
+    textarea.style.position = 'fixed';
+    textarea.style.opacity = '0';
+    document.body.appendChild(textarea);
+    textarea.select();
+    try {
+        document.execCommand('copy');
+    } catch (err) {
+        console.error('Copy failed:', err);
+    }
+    document.body.removeChild(textarea);
+}
+
+function showToast(message) {
+    const toastMessage = elements.toast.querySelector('.toast-message');
+    if (toastMessage) {
+        toastMessage.textContent = message;
+    } else {
+        elements.toast.textContent = message;
+    }
+    
+    elements.toast.hidden = false;
+    
+    // Auto-hide after 3 seconds
+    setTimeout(() => {
+        elements.toast.hidden = true;
+    }, 3000);
+}
+
+// ============================================
+// QR CODE GENERATION (Optional Enhancement)
+// ============================================
+// To generate a QR code, you can use a library like qrcode.js
+// or embed a QR code image. For now, this is a placeholder.
+function generateQRCode() {
+    const qrContainer = document.getElementById('qr-code');
+    if (!qrContainer) return;
+    
+    // The QR code would encode a mailto link
+    const mailtoUrl = `mailto:${CONFIG.CONTACT_EMAIL}?subject=${encodeURIComponent('Re: MathStar VR Pilot')}`;
+    
+    // If using a QR library, generate here
+    // For now, the placeholder SVG is shown
+    console.log('QR Code would encode:', mailtoUrl);
+}
