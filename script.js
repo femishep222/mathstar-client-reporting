@@ -72,7 +72,57 @@ document.addEventListener('DOMContentLoaded', function() {
     
     // Bind event listeners
     bindEvents();
+    
+    // Ensure video autoplay on mobile
+    initMobileVideoAutoplay();
 });
+
+// ============================================
+// MOBILE VIDEO AUTOPLAY
+// ============================================
+function initMobileVideoAutoplay() {
+    const videos = document.querySelectorAll('.demo-video');
+    
+    videos.forEach(video => {
+        // Ensure video has required attributes for mobile autoplay
+        video.setAttribute('playsinline', '');
+        video.setAttribute('webkit-playsinline', '');
+        video.muted = true;
+        
+        // Try to play the video
+        const playPromise = video.play();
+        
+        if (playPromise !== undefined) {
+            playPromise.catch(error => {
+                console.log('Auto-play was prevented:', error);
+                
+                // Add a one-time touch/click listener to start video on user interaction
+                const startVideoOnInteraction = () => {
+                    video.play().catch(e => console.log('Play failed:', e));
+                    document.removeEventListener('touchstart', startVideoOnInteraction);
+                    document.removeEventListener('click', startVideoOnInteraction);
+                };
+                
+                document.addEventListener('touchstart', startVideoOnInteraction, { once: true });
+                document.addEventListener('click', startVideoOnInteraction, { once: true });
+            });
+        }
+    });
+    
+    // Also try to play when video becomes visible (for lazy loading scenarios)
+    if ('IntersectionObserver' in window) {
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    const video = entry.target;
+                    video.play().catch(() => {});
+                }
+            });
+        }, { threshold: 0.25 });
+        
+        videos.forEach(video => observer.observe(video));
+    }
+}
 
 // ============================================
 // PLACEHOLDER UPDATES
