@@ -617,6 +617,15 @@ details[open] .accordion-icon {
 }
 
 /* ============================================
+   VIDEO
+   ============================================ */
+.demo-video {
+    width: 100%;
+    border-radius: var(--border-radius);
+    display: block;
+}
+
+/* ============================================
    FOOTER
    ============================================ */
 .footer {
@@ -640,29 +649,7 @@ details[open] .accordion-icon {
 }
 
 /* ============================================
-   PRINT
-   ============================================ */
-@media print {
-    .top-bar { display: none; }
-    .section { padding: 1rem 0; }
-    .hero { padding: 1rem 0; }
-}
-
-/* ============================================
-   ACCESSIBILITY
-   ============================================ */
-@media (prefers-reduced-motion: reduce) {
-    * { transition: none !important; }
-    html { scroll-behavior: auto; }
-}
-
-:focus-visible {
-    outline: 2px solid var(--color-primary);
-    outline-offset: 2px;
-}
-
-/* ============================================
-   MODAL
+MODAL
    ============================================ */
 .modal-overlay {
     position: fixed;
