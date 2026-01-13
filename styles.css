@@ -186,44 +186,8 @@ body {
     font-size: 1.125rem;
     color: var(--color-text-secondary);
     max-width: 540px;
-    margin: 0 auto var(--space-lg);
+    margin: 0 auto;
     font-weight: 400;
-}
-
-.hero-tiles {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: var(--space-sm);
-    margin-bottom: var(--space-md);
-}
-
-@media (max-width: 600px) {
-    .hero-tiles {
-        grid-template-columns: 1fr;
-    }
-}
-
-.hero-tile {
-    padding: var(--space-md) var(--space-sm);
-}
-
-.tile-number {
-    font-size: 2.5rem;
-    font-weight: 600;
-    color: var(--color-primary);
-    line-height: 1;
-    margin-bottom: 0.25rem;
-    letter-spacing: -0.02em;
-}
-
-.tile-label {
-    font-size: 0.8125rem;
-    color: var(--color-text-secondary);
-}
-
-.hero-footnote {
-    font-size: 0.75rem;
-    color: var(--color-text-secondary);
 }
 
 /* ============================================
@@ -614,6 +578,48 @@ details[open] .accordion-icon {
 
 .method-item dd {
     color: var(--color-text);
+}
+
+/* ============================================
+   STATS TILES (understated)
+   ============================================ */
+.stats-tiles {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: var(--space-sm);
+    margin-bottom: var(--space-sm);
+}
+
+@media (max-width: 600px) {
+    .stats-tiles {
+        grid-template-columns: 1fr;
+    }
+}
+
+.stat-tile {
+    text-align: center;
+    padding: var(--space-md) var(--space-sm);
+}
+
+.stat-number {
+    font-size: 1.75rem;
+    font-weight: 600;
+    color: var(--color-text);
+    line-height: 1;
+    margin-bottom: 0.25rem;
+    letter-spacing: -0.02em;
+}
+
+.stat-label {
+    font-size: 0.75rem;
+    color: var(--color-text-secondary);
+    line-height: 1.4;
+}
+
+.stats-footnote {
+    font-size: 0.75rem;
+    color: var(--color-text-secondary);
+    text-align: center;
 }
 
 /* ============================================
