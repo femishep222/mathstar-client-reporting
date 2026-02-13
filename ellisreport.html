@@ -329,6 +329,21 @@
                     <h4 class="chart-title">Both instructors rated MathStar as "Extremely helpful" (10/10)</h4>
                     <canvas id="chart-overall"></canvas>
                 </div>
+
+                <div class="chart-container chart-survey">
+                    <h4 class="chart-title">Students would recommend to a friend: 86% said "Yes"</h4>
+                    <canvas id="chart-recommend-friend"></canvas>
+                </div>
+
+                <div class="chart-container chart-survey">
+                    <h4 class="chart-title">Both instructors strongly agreed program fit their classroom routine (5/5)</h4>
+                    <canvas id="chart-classroom-fit"></canvas>
+                </div>
+
+                <div class="chart-container chart-survey">
+                    <h4 class="chart-title">Both instructors would recommend for similar classrooms (5/5)</h4>
+                    <canvas id="chart-recommend-classroom"></canvas>
+                </div>
             </div>
         </section>
 
@@ -338,34 +353,9 @@
                 <h2 class="section-title">Summary & Next Steps</h2>
 
                 <h3 class="subsection-title">Our Theory of Change</h3>
-                <p style="margin-bottom: var(--space-md); line-height: 1.6;">
-                    MathStar VR was designed with the express goal of <strong>creating academic turning points</strong> (ShepherdXR's mission: unearthing the unexpected Einsteins of tomorrow). It is <strong>not test prep</strong> and is designed <strong>independently of classroom instruction and other edtech tools</strong>.
+                <p style="margin-bottom: var(--space-xl); line-height: 1.6;">
+                    Our non-profit's mission is to <strong>unearth the unexpected Einsteins of tomorrow</strong>. Therefore, we designed MathStar with one goal in mind: to <strong>captivate a student's mind, heart and soul while doing math</strong>, and thereby create a turning point in their academics that will unlock their potential in life. MathStar is therefore <strong>not intended to be a test prep tool</strong>, or substitute for the excellent teaching required to build upon the foundation that MathStar lays.
                 </p>
-
-                <div style="margin-bottom: var(--space-xl);">
-                    <h4 style="font-size: 1rem; font-weight: 600; margin-bottom: var(--space-sm); color: var(--color-text-secondary);">Wrong Path</h4>
-                    <ul class="alignment-list" style="margin-bottom: var(--space-lg);">
-                        <li>Start: Get stuck — and without intervention...</li>
-                        <li>Cycle: Low success → low effort → low interest</li>
-                        <li>Center: Math FEAR</li>
-                    </ul>
-
-                    <h4 style="font-size: 1rem; font-weight: 600; margin-bottom: var(--space-sm); color: var(--color-primary);">Academic Turning Point (via MathStar VR)</h4>
-                    <ul class="alignment-list" style="margin-bottom: var(--space-lg);">
-                        <li>Engaged</li>
-                        <li>Enjoying</li>
-                        <li>Aha moments</li>
-                        <li>Confidence</li>
-                        <li>Growth mindset</li>
-                    </ul>
-
-                    <h4 style="font-size: 1rem; font-weight: 600; margin-bottom: var(--space-sm); color: var(--color-primary);">Right Path</h4>
-                    <ul class="alignment-list">
-                        <li>Start: Had a transformative 10-hour experience of wonder, success, and joy in math</li>
-                        <li>Cycle: Higher interest → higher effort → higher success</li>
-                        <li>Center: Math JOY</li>
-                    </ul>
-                </div>
 
                 <h3 class="subsection-title">Results: David A. Ellis Success Bound Academy</h3>
                 <p style="margin-bottom: var(--space-lg); line-height: 1.6;">
@@ -888,6 +878,138 @@
                             display: true,
                             text: '0-10 Scale: Not Helpful → Extremely Helpful',
                             font: { size: 11, weight: '600' }
+                        }
+                    },
+                    x: {
+                        grid: { display: false }
+                    }
+                },
+                plugins: {
+                    legend: { display: false }
+                }
+            }
+        });
+
+        // 11. Recommend to Friend (Student)
+        new Chart(document.getElementById('chart-recommend-friend'), {
+            type: 'bar',
+            data: {
+                labels: ['I would recommend\nto a friend'],
+                datasets: [{
+                    label: 'Average Score',
+                    data: [2.57],
+                    backgroundColor: primaryColor,
+                    borderColor: primaryColor,
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: true,
+                aspectRatio: 2,
+                scales: {
+                    y: {
+                        beginAtZero: false,
+                        min: 1,
+                        max: 3,
+                        grid: { color: gridColor },
+                        title: {
+                            display: true,
+                            text: '1-3 Scale',
+                            font: { size: 11, weight: '600' }
+                        },
+                        ticks: {
+                            callback: function(value) {
+                                return scale13Labels[value] || '';
+                            }
+                        }
+                    },
+                    x: {
+                        grid: { display: false }
+                    }
+                },
+                plugins: {
+                    legend: { display: false }
+                }
+            }
+        });
+
+        // 12. Classroom Fit (Instructor)
+        new Chart(document.getElementById('chart-classroom-fit'), {
+            type: 'bar',
+            data: {
+                labels: ['Mr. McKinnon', 'Ms. Joseph'],
+                datasets: [{
+                    label: 'Rating',
+                    data: [5, 5],
+                    backgroundColor: primaryColor,
+                    borderColor: primaryColor,
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: true,
+                aspectRatio: 2,
+                scales: {
+                    y: {
+                        beginAtZero: false,
+                        min: 1,
+                        max: 5,
+                        grid: { color: gridColor },
+                        title: {
+                            display: true,
+                            text: '1-5 Scale',
+                            font: { size: 11, weight: '600' }
+                        },
+                        ticks: {
+                            callback: function(value) {
+                                return scale15Labels[value] || '';
+                            }
+                        }
+                    },
+                    x: {
+                        grid: { display: false }
+                    }
+                },
+                plugins: {
+                    legend: { display: false }
+                }
+            }
+        });
+
+        // 13. Recommend for Similar Classroom (Instructor)
+        new Chart(document.getElementById('chart-recommend-classroom'), {
+            type: 'bar',
+            data: {
+                labels: ['Mr. McKinnon', 'Ms. Joseph'],
+                datasets: [{
+                    label: 'Rating',
+                    data: [5, 5],
+                    backgroundColor: primaryColor,
+                    borderColor: primaryColor,
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: true,
+                aspectRatio: 2,
+                scales: {
+                    y: {
+                        beginAtZero: false,
+                        min: 1,
+                        max: 5,
+                        grid: { color: gridColor },
+                        title: {
+                            display: true,
+                            text: '1-5 Scale',
+                            font: { size: 11, weight: '600' }
+                        },
+                        ticks: {
+                            callback: function(value) {
+                                return scale15Labels[value] || '';
+                            }
                         }
                     },
                     x: {
