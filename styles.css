@@ -208,7 +208,13 @@ body {
 
 .section-results .section-title {
     font-size: 2.25rem;
+    font-weight: 400;
     margin-bottom: var(--space-xl);
+}
+
+/* Overall Assessment should remain bold */
+#overall .section-title {
+    font-weight: 600;
 }
 
 /* Collapsible sections */
