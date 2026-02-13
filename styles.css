@@ -1028,6 +1028,58 @@ MODAL
 }
 
 /* ============================================
+   RESULTS / CHARTS
+   ============================================ */
+.result-category {
+    margin-bottom: var(--space-xl);
+    padding-bottom: var(--space-xl);
+    border-bottom: 1px solid var(--color-border);
+}
+
+.result-category:last-child {
+    border-bottom: none;
+}
+
+.chart-container {
+    margin-top: var(--space-lg);
+    margin-bottom: var(--space-lg);
+    padding: var(--space-md);
+    background: var(--color-bg);
+    border: 1px solid var(--color-border);
+    border-radius: var(--border-radius);
+}
+
+.chart-title {
+    font-size: 0.875rem;
+    font-weight: 600;
+    color: var(--color-text);
+    margin-bottom: var(--space-md);
+    text-align: center;
+}
+
+/* Status Indicators (Green/Yellow/Red) */
+.status-indicator {
+    display: inline-block;
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    margin-right: var(--space-xs);
+    vertical-align: middle;
+}
+
+.status-green {
+    background-color: #34C759;
+}
+
+.status-yellow {
+    background-color: #FFD60A;
+}
+
+.status-red {
+    background-color: #FF3B30;
+}
+
+/* ============================================
    ACCESSIBILITY
    ============================================ */
 @media (prefers-reduced-motion: reduce) {
